@@ -7,7 +7,7 @@ public class Spawner : MonoBehaviour
     private float _timer = 0f;
     public float spawnTime = 3f;
     public GameObject mob;
-    static List<GameObject> presentMobs = new List<GameObject>();
+    static List<GameObject> _presentMobs = new List<GameObject>();
     
     void Start()
     {
@@ -21,7 +21,7 @@ public class Spawner : MonoBehaviour
         
         if (_timer >= spawnTime)
         {
-            presentMobs.Add(Instantiate(mob, this.transform.position, Quaternion.identity));
+            _presentMobs.Add(Instantiate(mob, this.transform.position, Quaternion.identity));
             _timer = 0;
         }
         
