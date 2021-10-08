@@ -4,15 +4,27 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private float _timer = 0f;
+    public float spawnTime = 3f;
+    public GameObject mob;
+    static List<GameObject> presentMobs = new List<GameObject>();
+    
     void Start()
     {
         
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
+        _timer += Time.deltaTime;
+        
+        if (_timer >= spawnTime)
+        {
+            presentMobs.Add(Instantiate(mob, this.transform.position, Quaternion.identity));
+            _timer = 0;
+        }
+        
         
     }
 }
