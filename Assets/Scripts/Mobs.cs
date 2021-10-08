@@ -15,11 +15,9 @@ public class Mobs : MonoBehaviour
         _dest = _goal.transform.position;
         
     }
-
     
     void Update()
     {
         agent.destination = _dest;
     }
-    
 }

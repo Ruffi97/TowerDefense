@@ -15,7 +15,6 @@ public class Tower : MonoBehaviour
        // _target = GameObject.FindGameObjectWithTag("mob");
        
     }
-
     
     void Update()
     {
