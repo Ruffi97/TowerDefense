@@ -6,6 +6,7 @@ public class PlaceTower : MonoBehaviour
 {
     public GameObject towerPrefab;
     private GameObject _tower;
+    private int cost = 50;
 
     private bool CanPlaceTower()
     {

@@ -6,8 +6,8 @@ public class Tower : MonoBehaviour
 {
     private GameObject _target;
     public GameObject projectile;
-    private int _ShootingRange;
-    private int _targetDistance;
+    private Vector3 _ShootingRange = new Vector3(5, 0, 5);
+    private Vector3 _targetDistance;
     static List<GameObject> _projectiles = new List<GameObject>();
     
     void Start()
@@ -19,6 +19,8 @@ public class Tower : MonoBehaviour
     
     void Update()
     {
+        _targetDistance = _target.transform.position - this.transform.position;
+        
         if (InRange())
         {
             Fire();
@@ -28,7 +30,7 @@ public class Tower : MonoBehaviour
 
     public bool InRange()
     {
-        if ( _targetDistance <= _ShootingRange)
+        if ( _targetDistance == _ShootingRange)
         {
             return true;
         }
