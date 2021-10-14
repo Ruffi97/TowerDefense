@@ -4,39 +4,74 @@ using UnityEngine;
 
 public class Tower : MonoBehaviour
 {
+    [SerializeField]
     private GameObject _target;
+    public float range = 20f;
+    private float speedRotation = 3f;
+    private float fireRate = 1f;
+    private float fireCountDown = 0f;
     public GameObject projectile;
-    private Vector3 _ShootingRange = new Vector3(5, 0, 5);
-    private Vector3 _targetDistance;
-    static List<GameObject> _projectiles = new List<GameObject>();
+    public Transform SpawnPointProjectile;
     
     void Start()
     {
-       // _target = GameObject.FindGameObjectWithTag("mob");
-       
+        InvokeRepeating("UpdateTarget", 0f, 0.5f);
     }
     
     void Update()
     {
-        _targetDistance = _target.transform.position - this.transform.position;
-        
-        if (InRange())
+        if (_target == null)
+        {
+            return;
+        }
+
+        Vector3 dir = _target.transform.position - transform.position;
+        Quaternion lookRotation = Quaternion.LookRotation(dir);
+        Vector3 rotation = Quaternion.Lerp(transform.rotation, lookRotation, Time.deltaTime * speedRotation).eulerAngles;
+        transform.rotation = Quaternion.Euler(0f, rotation.y, 0f);
+
+        if(fireCountDown <= 0f) 
         {
             Fire();
+            fireCountDown = 1 / fireRate;
         }
-        
+        fireCountDown -= Time.deltaTime;
     }
 
-    public bool InRange()
+    void UpdateTarget()
     {
-        if ( _targetDistance == _ShootingRange)
+        GameObject[] mobs = GameObject.FindGameObjectsWithTag("mob");
+        float shortestTargetDistance = Mathf.Infinity;
+        GameObject nearestTarget = null;
+
+        foreach (GameObject mob in mobs)
         {
-            return true;
+            float distanceToTarget = Vector3.Distance(transform.position, mob.transform.position);
+            if(distanceToTarget < shortestTargetDistance)
+            {
+                shortestTargetDistance = distanceToTarget;
+                nearestTarget = mob;
+            }
         }
-        return false;
+        if(nearestTarget != null && shortestTargetDistance <= range)
+        {
+            _target = nearestTarget;
+        }
+        else { _target = null; }
     }
     public void Fire()
     {
-        _projectiles.Add(Instantiate(projectile, transform.position, Quaternion.identity));
+        GameObject GO = Instantiate(projectile, SpawnPointProjectile.transform.position, Quaternion.identity);
+        Projectile _projectile = GO.GetComponent<Projectile>();
+
+        if(_projectile != null)
+        {
+            _projectile.ResearchTarget(_target);
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(transform.position, range);
     }
 }

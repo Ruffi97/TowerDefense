@@ -20,13 +20,13 @@ public class PlaceTower : MonoBehaviour
             _tower = (GameObject) 
                 Instantiate(towerPrefab, transform.position, Quaternion.identity);
         }
-        else if (CanUpgradeMonster())
+        else if (CanUpgradeTower())
         {
             _tower.GetComponent<TowerLevel>().IncreaseLevel();
         }
     }
     
-    private bool CanUpgradeMonster()
+    private bool CanUpgradeTower()
     {
         if (_tower != null)
         {
